@@ -3,7 +3,7 @@
 
 CpuTimer::CpuTimer()
 {
-    __int64 countsPerSec{};
+    __int64 countsPerSec{};     // 获取机器内部计时器的频率
     QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
     m_SecondsPerCount = 1.0 / (double)countsPerSec;
 }

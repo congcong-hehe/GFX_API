@@ -84,6 +84,8 @@ int D3DApp::Run()
 
     m_Timer.Reset();
 
+    InitRenderResources();
+
     while (msg.message != WM_QUIT)
     {
         if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
@@ -98,8 +100,8 @@ int D3DApp::Run()
             if (!m_AppPaused)
             {
                 CalculateFrameStats();
-                UpdateScene(m_Timer.DeltaTime());
-                DrawScene();
+                UpdateRenderesources(m_Timer.DeltaTime());
+                Draw();
             }
             else
             {
@@ -122,6 +124,7 @@ bool D3DApp::Init()
     return true;
 }
 
+// buffer的申请记录在这个函数中， 因为每次改变窗口的高度和宽度，都需要修改frame buffer的高度和宽度
 void D3DApp::OnResize()
 {
     assert(m_pd3dImmediateContext);
@@ -158,7 +161,8 @@ void D3DApp::OnResize()
     depthStencilDesc.Height = m_ClientHeight;
     depthStencilDesc.MipLevels = 1;
     depthStencilDesc.ArraySize = 1;
-    depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    // d24_unrom, 无符号规范化浮点数，unsigned normalized, 规范化表示在0-1之间， D depth， S stencil
+    depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; 
 
     // 要使用 4X MSAA? --需要给交换链设置MASS参数
     if (m_Enable4xMsaa)

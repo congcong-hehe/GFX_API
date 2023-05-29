@@ -22,7 +22,7 @@ public:
 
 private:
     double m_SecondsPerCount = 0.0;
-    double m_DeltaTime = -1.0;
+    double m_DeltaTime = -1.0;  // 单位不是seconds，而是内部时钟计时器的频率
 
     __int64 m_BaseTime = 0;
     __int64 m_PausedTime = 0;
