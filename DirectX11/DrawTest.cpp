@@ -3,10 +3,22 @@
 #include "DXTrace.h"
 using namespace DirectX;
 
-const D3D11_INPUT_ELEMENT_DESC GameApp::VertexPosColor::inputLayout[2] = {
+struct VertexPosColor
+{
+    DirectX::XMFLOAT3 pos;
+    DirectX::XMFLOAT4 color;
+    static const D3D11_INPUT_ELEMENT_DESC inputLayout[2];
+};
+
+const D3D11_INPUT_ELEMENT_DESC VertexPosColor::inputLayout[2] = {
     { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 };
+
+ComPtr<ID3D11InputLayout> m_pVertexLayout;	// 顶点输入布局
+ComPtr<ID3D11Buffer> m_pVertexBuffer;		// 顶点缓冲区
+ComPtr<ID3D11VertexShader> m_pVertexShader;	// 顶点着色器
+ComPtr<ID3D11PixelShader> m_pPixelShader;	// 像素着色器
 
 GameApp::GameApp(HINSTANCE hInstance, const std::wstring& windowName, int initWidth, int initHeight)
     : D3DApp(hInstance, windowName, initWidth, initHeight)
@@ -17,12 +29,12 @@ GameApp::~GameApp()
 {
 }
 
-void GameApp::UpdateRenderesources(float dt)
+void GameApp::OnUpdate(float dt)
 {
 
 }
 
-void GameApp::Draw()
+void GameApp::OnDraw()
 {
     assert(m_pd3dImmediateContext);
     assert(m_pSwapChain);
@@ -41,21 +53,11 @@ void GameApp::OnResize()
     D3DApp::OnResize();
 }
 
-bool GameApp::InitRenderResources()
+bool GameApp::OnInit()
 {
     ComPtr<ID3DBlob> blob;
 
-    // 创建顶点着色器
-    HR(CreateShaderFromFile(L"HLSL\\Triangle_VS.cso", L"HLSL\\Triangle_VS.hlsl", "VS", "vs_5_0", blob.ReleaseAndGetAddressOf()));
-    HR(m_pd3dDevice->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, m_pVertexShader.GetAddressOf()));
-    // 创建并绑定顶点布局
-    HR(m_pd3dDevice->CreateInputLayout(VertexPosColor::inputLayout, ARRAYSIZE(VertexPosColor::inputLayout),
-        blob->GetBufferPointer(), blob->GetBufferSize(), m_pVertexLayout.GetAddressOf()));
-
-    // 创建像素着色器
-    HR(CreateShaderFromFile(L"HLSL\\Triangle_PS.cso", L"HLSL\\Triangle_PS.hlsl", "PS", "ps_5_0", blob.ReleaseAndGetAddressOf()));
-    HR(m_pd3dDevice->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, m_pPixelShader.GetAddressOf()));
-
+    /*****************创建vertex buffer & index buffer******************/
     // 设置三角形顶点
     VertexPosColor vertices[] =
     {
@@ -76,10 +78,20 @@ bool GameApp::InitRenderResources()
     InitData.pSysMem = vertices;
     HR(m_pd3dDevice->CreateBuffer(&vbd, &InitData, m_pVertexBuffer.GetAddressOf()));
 
+    /****************************创建shader********************************/
 
-    // ******************
-    // 给渲染管线各个阶段绑定好所需资源
-    //
+    // 创建顶点着色器
+    HR(CreateShaderFromFile(L"HLSL\\DrawTest_VS.cso", L"HLSL\\DrawTest_VS.hlsl", "VS", "vs_5_0", blob.ReleaseAndGetAddressOf()));
+    HR(m_pd3dDevice->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, m_pVertexShader.GetAddressOf()));
+    // 创建并绑定顶点布局, 必须要在创建vs之后
+    HR(m_pd3dDevice->CreateInputLayout(VertexPosColor::inputLayout, ARRAYSIZE(VertexPosColor::inputLayout),
+        blob->GetBufferPointer(), blob->GetBufferSize(), m_pVertexLayout.GetAddressOf()));
+
+    // 创建像素着色器
+    HR(CreateShaderFromFile(L"HLSL\\DrawTest_PS.cso", L"HLSL\\DrawTest_PS.hlsl", "PS", "ps_5_0", blob.ReleaseAndGetAddressOf()));
+    HR(m_pd3dDevice->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, m_pPixelShader.GetAddressOf()));
+    
+    /***************************设置pipeline********************************/
 
     // 输入装配阶段的顶点缓冲区设置
     UINT stride = sizeof(VertexPosColor);	// 跨越字节数
@@ -93,15 +105,11 @@ bool GameApp::InitRenderResources()
     m_pd3dImmediateContext->VSSetShader(m_pVertexShader.Get(), nullptr, 0);
     m_pd3dImmediateContext->PSSetShader(m_pPixelShader.Get(), nullptr, 0);
 
-    // ******************
-    // 设置调试对象名
-    //
+    /**************************设置调试对象名****************************/
     D3D11SetDebugObjectName(m_pVertexLayout.Get(), "VertexPosColorLayout");
     D3D11SetDebugObjectName(m_pVertexBuffer.Get(), "VertexBuffer");
-    D3D11SetDebugObjectName(m_pVertexShader.Get(), "Trangle_VS");
-    D3D11SetDebugObjectName(m_pPixelShader.Get(), "Trangle_PS");
+    D3D11SetDebugObjectName(m_pVertexShader.Get(), "DrawTest_VS");
+    D3D11SetDebugObjectName(m_pPixelShader.Get(), "DrawTest_PS");
     
-    return true;
-
     return true;
 }

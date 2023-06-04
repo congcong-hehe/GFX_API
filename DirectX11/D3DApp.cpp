@@ -84,7 +84,7 @@ int D3DApp::Run()
 
     m_Timer.Reset();
 
-    InitRenderResources();
+    OnInit();
 
     while (msg.message != WM_QUIT)
     {
@@ -100,8 +100,8 @@ int D3DApp::Run()
             if (!m_AppPaused)
             {
                 CalculateFrameStats();
-                UpdateRenderesources(m_Timer.DeltaTime());
-                Draw();
+                OnUpdate(m_Timer.DeltaTime());
+                OnDraw();
             }
             else
             {

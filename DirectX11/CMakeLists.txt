@@ -1,13 +1,9 @@
 cmake_minimum_required (VERSION 3.14)
 
-# ------------------------------------------------------------------------------
-# 用户配置
-# ------------------------------------------------------------------------------
 # 设置解决方案名
 project("DirectX11 Learn")
 # 设置项目名(不能有空格) 
 set(TARGET_NAME "DirectX11")
-set(HLSL_DIR "HLSL")
 
 # ------------------------------------------------------------------------------
 # 项目细节配置(需熟悉CMake)
@@ -17,22 +13,49 @@ add_compile_definitions(UNICODE _UNICODE)
 
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
-file(COPY ${HLSL_DIR} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(GLOB HLSL_FILES 
+    HLSL/DrawTest_PS.hlsl
+    HLSL/DrawTest_VS.hlsl
+    HLSL/DrawTest.hlsli
+)
 
-file(GLOB HLSL_FILES ${HLSL_DIR}/*.hlsl HLSL/*.hlsli)
-file(GLOB HEADER_FILES ./*.h)
-file(GLOB SOURCE_FILES ./*.cpp)
+# message("HLSL_FILES: ${HLSL_FILES}")
+
+file(GLOB HEADER_FILES
+    WinMin.h
+    D3DApp.h
+    DXTrace.h
+    CpuTimer.h
+    D3DUtil.h
+    GameApp.h
+)
+file(GLOB SOURCE_FILES
+    D3DApp.cpp
+    DXTrace.cpp
+    CpuTimer.cpp
+    D3DUtil.cpp
+    Main.cpp
+    DrawTest.cpp
+)
+
+file(COPY ${HLSL_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/HLSL)
 
 foreach(HLSL_FILE ${HLSL_FILES})
+    message(${HLSL_FILE})
 
     get_filename_component(HLSL_FDIR ${HLSL_FILE} DIRECTORY)
+    # message("HLSL_FDIR: ${HLSL_FDIR}")
     get_filename_component(HLSL_FBASENAME_WE ${HLSL_FILE} NAME_WE)
+    # message("HLSL_FBASENAME: ${HLSL_FBASENAME}")
     string(CONCAT HLSL_FNAME_WE ${HLSL_FDIR} / ${HLSL_FBASENAME_WE})
+    # message("HLSL_FNAME_WE: ${HLSL_FNAME_WE}")
 
     string(LENGTH ${HLSL_FBASENAME_WE} LEN_FNAME_WE)
     
     math(EXPR LEN_FNAME_WE "${LEN_FNAME_WE}-2")
+    message(${LEN_FNAME_WE})
     string(SUBSTRING ${HLSL_FBASENAME_WE} ${LEN_FNAME_WE} 2 ENTRY_POINT)
+    message(${ENTRY_POINT})
     string(TOLOWER ${ENTRY_POINT} SHADER_TYPE)
 
     if ("${SHADER_TYPE}" STREQUAL "vs") 
