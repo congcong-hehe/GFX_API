@@ -4,7 +4,7 @@
 #include <wrl/client.h>
 #include <string>
 #include "WinMin.h"
-#include <d3d11_1.h>
+#include <d3d11_3.h>
 #include <DirectXMath.h>
 #include "CpuTimer.h"
 
@@ -60,9 +60,9 @@ protected:
     ComPtr<ID3D11DeviceContext> m_pd3dImmediateContext;   // D3D11设备上下文
     // D3D11交换链, 缓存了一个或者多个2D纹理，它们都可以被称为back buffer
     ComPtr<IDXGISwapChain> m_pSwapChain;                  
-    // Direct3D 11.1
-    ComPtr<ID3D11Device1> m_pd3dDevice1;                  // D3D11.1设备
-    ComPtr<ID3D11DeviceContext1> m_pd3dImmediateContext1; // D3D11.1设备上下文
+    // Direct3D 11.3
+    ComPtr<ID3D11Device3> m_pd3dDevice3;                  // D3D11.1设备
+    ComPtr<ID3D11DeviceContext3> m_pd3dImmediateContext3; // D3D11.1设备上下文
     ComPtr<IDXGISwapChain1> m_pSwapChain1;                // D3D11.1交换链
     // 常用资源
     ComPtr<ID3D11Texture2D> m_pDepthStencilBuffer;        // 深度模板缓冲区

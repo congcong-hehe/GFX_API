@@ -131,10 +131,10 @@ void D3DApp::OnResize()
     assert(m_pd3dDevice);
     assert(m_pSwapChain);
 
-    if (m_pd3dDevice1 != nullptr)
+    if (m_pd3dDevice3 != nullptr)
     {
-        assert(m_pd3dImmediateContext1);
-        assert(m_pd3dDevice1);
+        assert(m_pd3dImmediateContext3);
+        assert(m_pd3dDevice3);
         assert(m_pSwapChain1);
     }
 
@@ -450,8 +450,8 @@ bool D3DApp::InitDirect3D()
     // 如果包含，则说明支持D3D11.1
     if (dxgiFactory2 != nullptr)
     {
-        HR(m_pd3dDevice.As(&m_pd3dDevice1));
-        HR(m_pd3dImmediateContext.As(&m_pd3dImmediateContext1));
+        HR(m_pd3dDevice.As(&m_pd3dDevice3));
+        HR(m_pd3dImmediateContext.As(&m_pd3dImmediateContext3));
         // 填充各种结构体用以描述交换链
         DXGI_SWAP_CHAIN_DESC1 sd;
         ZeroMemory(&sd, sizeof(sd));
