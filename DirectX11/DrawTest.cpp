@@ -44,6 +44,7 @@ void GameApp::OnDraw()
     m_pd3dImmediateContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     // 绘制三角形
+    // same as DrawInstanced() with InstanceCount = 1 && StartInstanceLocation = 0
     m_pd3dImmediateContext->Draw(3, 0);
     HR(m_pSwapChain->Present(0, 0));
 }
