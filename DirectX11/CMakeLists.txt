@@ -1,5 +1,8 @@
 cmake_minimum_required (VERSION 3.14)
 
+# 设置项目名(不能有空格) 
+set(TARGET_NAME "DirectX11")
+
 file(GLOB HLSL_FILES 
     HLSL/DrawTest_PS.hlsl
     HLSL/DrawTest_VS.hlsl
@@ -28,7 +31,7 @@ file(GLOB SOURCE_FILES
 file(COPY ${HLSL_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/HLSL)
 
 foreach(HLSL_FILE ${HLSL_FILES})
-    message(${HLSL_FILE})
+    # message(${HLSL_FILE})
 
     get_filename_component(HLSL_FDIR ${HLSL_FILE} DIRECTORY)
     # message("HLSL_FDIR: ${HLSL_FDIR}")
@@ -40,9 +43,9 @@ foreach(HLSL_FILE ${HLSL_FILES})
     string(LENGTH ${HLSL_FBASENAME_WE} LEN_FNAME_WE)
     
     math(EXPR LEN_FNAME_WE "${LEN_FNAME_WE}-2")
-    message(${LEN_FNAME_WE})
+    # message(${LEN_FNAME_WE})
     string(SUBSTRING ${HLSL_FBASENAME_WE} ${LEN_FNAME_WE} 2 ENTRY_POINT)
-    message(${ENTRY_POINT})
+    # message(${ENTRY_POINT})
     string(TOLOWER ${ENTRY_POINT} SHADER_TYPE)
 
     if ("${SHADER_TYPE}" STREQUAL "vs") 
@@ -69,6 +72,9 @@ endforeach()
 
 add_executable(${TARGET_NAME} WIN32 ${SOURCE_FILES})
 target_link_libraries(${TARGET_NAME} d3d11.lib dxgi.lib dxguid.lib D3DCompiler.lib winmm.lib d2d1.lib dwrite.lib)
+
+target_link_libraries(${TARGET_NAME} ImGui)
+file(COPY imgui.ini DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # 输出文件名
 set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${TARGET_NAME})

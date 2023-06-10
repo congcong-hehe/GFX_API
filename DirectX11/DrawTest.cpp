@@ -31,7 +31,7 @@ GameApp::~GameApp()
 
 void GameApp::OnUpdate(float dt)
 {
-
+    
 }
 
 void GameApp::OnDraw()
@@ -46,6 +46,9 @@ void GameApp::OnDraw()
     // 绘制三角形
     // same as DrawInstanced() with InstanceCount = 1 && StartInstanceLocation = 0
     m_pd3dImmediateContext->Draw(3, 0);
+
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     HR(m_pSwapChain->Present(0, 0));
 }
 

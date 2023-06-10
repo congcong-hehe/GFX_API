@@ -8,6 +8,10 @@
 #include <DirectXMath.h>
 #include "CpuTimer.h"
 
+#include <imgui.h>
+#include <backends/imgui_impl_dx11.h>
+#include <backends/imgui_impl_win32.h>
+
 // 使用模板别名(C++11)简化类型名
 template <class T>
 using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -37,6 +41,7 @@ public:
 protected:
     bool InitMainWindow();      // 窗口初始化
     bool InitDirect3D();        // Direct3D初始化
+    bool InitImgui();
 
     void CalculateFrameStats(); // 计算每秒帧数并在窗口显示
 
