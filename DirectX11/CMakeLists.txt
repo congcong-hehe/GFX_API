@@ -13,7 +13,7 @@ file(GLOB HLSL_FILES
 file(GLOB SOURCE_FILES
     Common/*.cpp
     Main.cpp
-    PrimitiveType.cpp
+    Predicate.cpp
 )
 
 file(COPY ${HLSL_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/HLSL)

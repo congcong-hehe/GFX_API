@@ -3,8 +3,6 @@
 void CreateBox(const DirectX::XMFLOAT3 center, const float width/*x*/, const float length/*y*/, const float depth/**/, 
     std::vector<DirectX::XMFLOAT3> &vertex_vec, std::vector<unsigned int> &index_vec)
 {
-    vertex_vec.resize(8);
-
     float half_width = width / 2;
     float half_length = length / 2;
     float half_depth = depth / 2;
