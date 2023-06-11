@@ -4,9 +4,8 @@ cmake_minimum_required (VERSION 3.14)
 set(TARGET_NAME "DirectX11")
 
 file(GLOB HLSL_FILES 
-    HLSL/vertex_attribute_c_VS.hlsl
-    HLSL/vertex_attribute_c_PS.hlsl
-    HLSL/vertex.hlsli
+    HLSL/*.hlsl
+    HLSL/*.hlsli
 )
 
 # message("HLSL_FILES: ${HLSL_FILES}")
