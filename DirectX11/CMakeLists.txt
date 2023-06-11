@@ -4,28 +4,17 @@ cmake_minimum_required (VERSION 3.14)
 set(TARGET_NAME "DirectX11")
 
 file(GLOB HLSL_FILES 
-    HLSL/DrawTest_PS.hlsl
-    HLSL/DrawTest_VS.hlsl
-    HLSL/DrawTest.hlsli
+    HLSL/vertex_attribute_c_VS.hlsl
+    HLSL/vertex_attribute_c_PS.hlsl
+    HLSL/vertex.hlsli
 )
 
 # message("HLSL_FILES: ${HLSL_FILES}")
 
-file(GLOB HEADER_FILES
-    WinMin.h
-    D3DApp.h
-    DXTrace.h
-    CpuTimer.h
-    D3DUtil.h
-    GameApp.h
-)
 file(GLOB SOURCE_FILES
-    D3DApp.cpp
-    DXTrace.cpp
-    CpuTimer.cpp
-    D3DUtil.cpp
+    Common/*.cpp
     Main.cpp
-    DrawTest.cpp
+    PrimitiveType.cpp
 )
 
 file(COPY ${HLSL_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/HLSL)

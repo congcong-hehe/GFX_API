@@ -1,6 +1,6 @@
-#include "GameApp.h"
-#include "D3DUtil.h"
-#include "DXTrace.h"
+#include "Common/GameApp.h"
+#include "Common/D3DUtil.h"
+#include "Common/DXTrace.h"
 using namespace DirectX;
 
 struct VertexPosColor
@@ -85,14 +85,14 @@ bool GameApp::OnInit()
     /****************************创建shader********************************/
 
     // 创建顶点着色器
-    HR(CreateShaderFromFile(L"HLSL\\DrawTest_VS.cso", L"HLSL\\DrawTest_VS.hlsl", "VS", "vs_5_0", blob.ReleaseAndGetAddressOf()));
+    HR(CreateShaderFromFile(L"HLSL\\vertex_attribute_c_VS.cso", L"HLSL\\vertex_attribute_c_VS.hlsl", "VS", "vs_5_0", blob.ReleaseAndGetAddressOf()));
     HR(m_pd3dDevice->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, m_pVertexShader.GetAddressOf()));
     // 创建并绑定顶点布局, 必须要在创建vs之后
     HR(m_pd3dDevice->CreateInputLayout(VertexPosColor::inputLayout, ARRAYSIZE(VertexPosColor::inputLayout),
         blob->GetBufferPointer(), blob->GetBufferSize(), m_pVertexLayout.GetAddressOf()));
 
     // 创建像素着色器
-    HR(CreateShaderFromFile(L"HLSL\\DrawTest_PS.cso", L"HLSL\\DrawTest_PS.hlsl", "PS", "ps_5_0", blob.ReleaseAndGetAddressOf()));
+    HR(CreateShaderFromFile(L"HLSL\\vertex_attribute_c_PS.cso", L"HLSL\\vertex_attribute_c_PS.hlsl", "PS", "ps_5_0", blob.ReleaseAndGetAddressOf()));
     HR(m_pd3dDevice->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, m_pPixelShader.GetAddressOf()));
     
     /***************************设置pipeline********************************/
@@ -112,8 +112,8 @@ bool GameApp::OnInit()
     /**************************设置调试对象名****************************/
     D3D11SetDebugObjectName(m_pVertexLayout.Get(), "VertexPosColorLayout");
     D3D11SetDebugObjectName(m_pVertexBuffer.Get(), "VertexBuffer");
-    D3D11SetDebugObjectName(m_pVertexShader.Get(), "DrawTest_VS");
-    D3D11SetDebugObjectName(m_pPixelShader.Get(), "DrawTest_PS");
+    D3D11SetDebugObjectName(m_pVertexShader.Get(), "vertex_attribute_c_VS");
+    D3D11SetDebugObjectName(m_pPixelShader.Get(), "vertex_attribute_c_PS");
     
     return true;
 }
